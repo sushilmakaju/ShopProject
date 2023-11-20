@@ -23,9 +23,9 @@ class UserApiView(APIView):
         serilizer = UserSerilizers(data=request.data)
         if serilizer.is_valid():
             serilizer.save()
-            return Response("save")
+            return Response("User Created")
         else:
-            return Response("ttt")
+            return Response("Validation error!!!")
         
 class LoginApiView(APIView):
     

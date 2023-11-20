@@ -21,5 +21,5 @@ class UserSerilizers(serializers.ModelSerializer):
 class GetUserSerilizers(serializers.ModelSerializer):     
     class Meta:
         model = User
-        fields = ['username', 'email', 'name']
+        fields = ['username', 'email', 'name', 'password']
         
