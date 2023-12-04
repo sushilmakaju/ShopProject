@@ -26,7 +26,7 @@ class UserApiView(APIView):
             hashed_password = make_password(request.data['password'])
             serilizer.validated_data['password'] = hashed_password
             serilizer.save()
-            return Response("User Created", serilizer.data)
+            return Response("User Created")
         else:
             return Response("Validation error!!!")
         
