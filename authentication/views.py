@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from .serillizers import *
 from rest_framework import status
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import make_password
 
 
 # Create your views here.
@@ -19,11 +20,13 @@ class UserApiView(APIView):
             return Response("error")
         
     
-    def post(self, request, format = None):
+    def post(self, request):
         serilizer = UserSerilizers(data=request.data)
         if serilizer.is_valid():
+            hashed_password = make_password(request.data['password'])
+            serilizer.validated_data['password'] = hashed_password
             serilizer.save()
-            return Response("User Created")
+            return Response("User Created", serilizer.data)
         else:
             return Response("Validation error!!!")
         
