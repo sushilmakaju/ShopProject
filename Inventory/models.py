@@ -23,7 +23,7 @@ class Order(models.Model):
     order_date = models.DateField(auto_now_add=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
+ 
 class OrderDetails(models.Model):
     unit_price = models.IntegerField()
     quantity = models.IntegerField
