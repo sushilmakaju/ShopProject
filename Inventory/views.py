@@ -83,7 +83,7 @@ class CategoryApiView(APIView):
         category_serializers = self.serializer_class(data=request.data)
         if category_serializers.is_valid():
             category_serializers.save()
-            return Response('Data created', category_serializers.data)
+            return Response(category_serializers.data)
         return Response(category_serializers.errors) 
             
     def put(self, request, pk):
@@ -92,8 +92,8 @@ class CategoryApiView(APIView):
             category_serialiers = self.serializer_class(category_obj, data=request.data)
             if category_serialiers.is_valid():
                 category_serialiers.save()
-                return Response('Data updated', category_serialiers.data)
-            return Response('validation error', category_serialiers.errors)
+                return Response(category_serialiers.data)
+            return Response(category_serialiers.errors)
         else:
             return Response('No data found')
             
@@ -127,7 +127,7 @@ class ProductApiView(APIView):
         product_serializer = ProductSerializers(data=request.data)
         if product_serializer.is_valid():
             product_serializer.save()
-            return Response({'data' : product_serializer.data})
+            return Response( product_serializer.data)
         return Response(product_serializer.errors)
     
     def put(self, request, pk):
