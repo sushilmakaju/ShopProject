@@ -6,6 +6,7 @@ from .serillizers import *
 from rest_framework import status
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
+from rest_framework.authtoken.models import Token
 
 
 # Create your views here.
@@ -39,10 +40,12 @@ class LoginApiView(APIView):
         # print(auth, username, password)
         if auth is not None:
             login(request, auth)
-            return Response("Login SucessFull")
+            token, created = Token.objects.get_or_create(user=auth)
+
+            # Include the token in the response
+            return Response({"token": token.key, "message": "Login Successful"})
         else:
-            return Response("Try Again")
-        
+            return Response({"message": "Try Again"})
 
 class LogoutApiView(APIView):
     

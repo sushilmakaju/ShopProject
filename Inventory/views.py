@@ -3,11 +3,15 @@ from . serillizers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
 class CustomerViewApi(APIView):
     serilizers = CustomerSerializers
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     
     def get(self, request, pk=None):
         if not pk:
@@ -102,6 +106,8 @@ class CategoryApiView(APIView):
             
         
 class ProductApiView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     
     def get(self, request, pk=None):
         if not pk:
@@ -109,30 +115,30 @@ class ProductApiView(APIView):
             product_serializers = ProductSerializers(product_obj, many=True) 
             if product_serializers:
                 return Response(product_serializers.data)
-            return Response('no data found')
+            return Response({'message': 'no data found'})
         else:
             product_obj = Product.objects.get(id=pk)
             product_serializers = ProductSerializers(product_obj)
             if product_serializers:
-                return Response(product_serializers.data)
-            return Response('no data found')
+                return Response({'data': product_serializers.data})
+            return Response({'message':'no data found'})
         
     def post(self, request):
         product_serializer = ProductSerializers(data=request.data)
         if product_serializer.is_valid():
             product_serializer.save()
-            return Response('Data Created')
+            return Response({'data' : product_serializer.data})
         return Response(product_serializer.errors)
     
     def put(self, request, pk):
         try:
             product_obj = Product.objects.get(id=pk)
         except:
-            return Response('No data found')
+            return Response({'message':'No data found'})
         product_serializers = ProductSerializers(product_obj, data=request.data)
         if product_serializers.is_valid():
             product_serializers.save()
-            return Response('data updated')
+            return Response({'message' : 'data updated'})
         return Response(product_serializers.errors)
     
     def delete(self, request, pk):
