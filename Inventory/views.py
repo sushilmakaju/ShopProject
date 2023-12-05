@@ -2,6 +2,7 @@ from django.shortcuts import render
 from . serillizers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -107,13 +108,13 @@ class ProductApiView(APIView):
             product_obj = Product.objects.all()
             product_serializers = ProductSerializers(product_obj, many=True) 
             if product_serializers:
-                return Response('Data view')
+                return Response(product_serializers.data)
             return Response('no data found')
         else:
             product_obj = Product.objects.get(id=pk)
             product_serializers = ProductSerializers(product_obj)
             if product_serializers:
-                return Response('Data view')
+                return Response(product_serializers.data)
             return Response('no data found')
         
     def post(self, request):
@@ -226,12 +227,8 @@ class OrderdetailsApiView(APIView):
             return Response(orderdetails_serailizer.errors)
         
     
-
-from django.shortcuts import get_object_or_404
-
-
 class GenerateBillAPIView(APIView):
-    def post(self, request, order_details_id, format=None):
+    def post(self, request, order_details_id):
 
         order_details = get_object_or_404(OrderDetails, pk=order_details_id)
         total_amount = self.calculate_total_amount(order_details)
